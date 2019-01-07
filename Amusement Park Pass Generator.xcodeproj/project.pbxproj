@@ -16,6 +16,7 @@
 		69AE5AC921E2B1CA001B50AF /* AccessTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */; };
 		69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5ACA21E2B3EA001B50AF /* Entrants.swift */; };
 		69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */; };
+		69BD3BF921E39E2D00A5B608 /* PassReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BD3BF821E39E2D00A5B608 /* PassReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTypes.swift; sourceTree = "<group>"; };
 		69AE5ACA21E2B3EA001B50AF /* Entrants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entrants.swift; sourceTree = "<group>"; };
 		69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkPass.swift; sourceTree = "<group>"; };
+		69BD3BF821E39E2D00A5B608 /* PassReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,10 @@
 		69A03E4321E2D19A00D3EA79 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				69BD3BF821E39E2D00A5B608 /* PassReader.swift */,
+				69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */,
+				69AE5ACA21E2B3EA001B50AF /* Entrants.swift */,
+				69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */,
 				69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */,
 			);
 			path = Model;
@@ -77,9 +83,6 @@
 				69AE5ABD21E2AFEB001B50AF /* Assets.xcassets */,
 				69AE5ABF21E2AFEB001B50AF /* LaunchScreen.storyboard */,
 				69AE5AC221E2AFEC001B50AF /* Info.plist */,
-				69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */,
-				69AE5ACA21E2B3EA001B50AF /* Entrants.swift */,
-				69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */,
 			);
 			path = "Amusement Park Pass Generator";
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 				69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */,
 				69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */,
 				69AE5AB921E2AFE9001B50AF /* ViewController.swift in Sources */,
+				69BD3BF921E39E2D00A5B608 /* PassReader.swift in Sources */,
 				69AE5AB721E2AFE9001B50AF /* AppDelegate.swift in Sources */,
 				69AE5AC921E2B1CA001B50AF /* AccessTypes.swift in Sources */,
 			);

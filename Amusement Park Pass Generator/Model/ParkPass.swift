@@ -11,8 +11,8 @@ import Foundation
 // A common laguage between a pass card and a pass reader.
 
 struct ParkPass: PermissionsReadable {
-    var areaPermissions: [AreaAccess]
-    var ridePermissions: [RideAccess]
-    var discountsAvailable: [DiscountType]
+    var areaPermissions: [AccessArea.Area]
+    var ridePermissions: [AccessArea.Ride]
+    var discountsAvailable: [Discount]
 }
 
