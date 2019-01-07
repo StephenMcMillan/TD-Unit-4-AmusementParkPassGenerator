@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69A03E4521E2D1F800D3EA79 /* InformationRequirements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */; };
 		69AE5AB721E2AFE9001B50AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5AB621E2AFE9001B50AF /* AppDelegate.swift */; };
 		69AE5AB921E2AFE9001B50AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5AB821E2AFE9001B50AF /* ViewController.swift */; };
 		69AE5ABC21E2AFE9001B50AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69AE5ABA21E2AFE9001B50AF /* Main.storyboard */; };
 		69AE5ABE21E2AFEB001B50AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69AE5ABD21E2AFEB001B50AF /* Assets.xcassets */; };
 		69AE5AC121E2AFEB001B50AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69AE5ABF21E2AFEB001B50AF /* LaunchScreen.storyboard */; };
+		69AE5AC921E2B1CA001B50AF /* AccessTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */; };
+		69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5ACA21E2B3EA001B50AF /* Entrants.swift */; };
+		69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationRequirements.swift; sourceTree = "<group>"; };
 		69AE5AB321E2AFE9001B50AF /* Amusement Park Pass Generator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Amusement Park Pass Generator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69AE5AB621E2AFE9001B50AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69AE5AB821E2AFE9001B50AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +27,9 @@
 		69AE5ABD21E2AFEB001B50AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		69AE5AC021E2AFEB001B50AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69AE5AC221E2AFEC001B50AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTypes.swift; sourceTree = "<group>"; };
+		69AE5ACA21E2B3EA001B50AF /* Entrants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entrants.swift; sourceTree = "<group>"; };
+		69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkPass.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +43,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		69A03E4321E2D19A00D3EA79 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		69AE5AAA21E2AFE9001B50AF = {
 			isa = PBXGroup;
 			children = (
@@ -54,12 +70,16 @@
 		69AE5AB521E2AFE9001B50AF /* Amusement Park Pass Generator */ = {
 			isa = PBXGroup;
 			children = (
+				69A03E4321E2D19A00D3EA79 /* Model */,
 				69AE5AB621E2AFE9001B50AF /* AppDelegate.swift */,
 				69AE5AB821E2AFE9001B50AF /* ViewController.swift */,
 				69AE5ABA21E2AFE9001B50AF /* Main.storyboard */,
 				69AE5ABD21E2AFEB001B50AF /* Assets.xcassets */,
 				69AE5ABF21E2AFEB001B50AF /* LaunchScreen.storyboard */,
 				69AE5AC221E2AFEC001B50AF /* Info.plist */,
+				69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */,
+				69AE5ACA21E2B3EA001B50AF /* Entrants.swift */,
+				69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */,
 			);
 			path = "Amusement Park Pass Generator";
 			sourceTree = "<group>";
@@ -135,8 +155,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69A03E4521E2D1F800D3EA79 /* InformationRequirements.swift in Sources */,
+				69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */,
+				69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */,
 				69AE5AB921E2AFE9001B50AF /* ViewController.swift in Sources */,
 				69AE5AB721E2AFE9001B50AF /* AppDelegate.swift in Sources */,
+				69AE5AC921E2B1CA001B50AF /* AccessTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
