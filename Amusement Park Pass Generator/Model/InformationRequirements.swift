@@ -11,20 +11,21 @@ import Foundation
 // MARK: - Protocols describing what information an entrant must provide.
 protocol AgeIdentifiable {
     var dateOfBirth: Date { get }
+    var isBirthday: Bool { get }
     
-    static func isChild(dob: Date) -> Bool
-    func isBirthday() -> Bool
+    static func isChild(dateOfBirth: Date) -> Bool
 }
 
 extension AgeIdentifiable {
-    static func isChild(dob: Date) -> Bool {
+   
+    static func isChild(dateOfBirth: Date) -> Bool {
         // Must be less than 5.
         let currentCalendar = Calendar.current
-        let age = currentCalendar.dateComponents([.year], from: dob, to: Date()).year ?? 0
+        let age = currentCalendar.dateComponents([.year], from: dateOfBirth, to: Date()).year ?? 0
         return age < 5 ? true : false
     }
     
-    func isBirthday() -> Bool {
+    var isBirthday: Bool {
         let today = Date()
         let todayComponents = Calendar.current.dateComponents([.month, .day], from: today)
         

@@ -13,10 +13,10 @@ class Test {
         // MARK: - Testing Guests
         /// Regular Guest
                 let firstEverGuest = Guest()
-//                PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.kitchen))
-//                PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.amusement))
-//                PassReader.swipe(firstEverGuest.pass, forAccessTo: .ride(.priorityQueueing))
-//                KioskCashRegister.swipe(firstEverGuest.pass, forPurchaseOf: .food)
+        //                PassReader.swipe(swipedBy: firstEverGuest, forAccessTo: .parkArea(.kitchen))
+        //                PassReader.swipe(swipedBy: firstEverGuest, forAccessTo: .parkArea(.amusement))
+        //                PassReader.swipe(swipedBy: firstEverGuest, forAccessTo: .ride(.priorityQueueing))
+        //                KioskCashRegister.swipe(swipedBy: firstEverGuest, forPurchaseOf: .food)
         
         /// VIP Guest
         //        let vipGuest = VIPGuest()
@@ -74,8 +74,8 @@ class Test {
         // MARK: - Birthday Test
         //Since Date() is today then this will show the happy birthday message.
         let child = try! ChildGuest(dateOfBirth: Date())
-        PassReader.swipe(swipedBy: child, forAccessTo: .parkArea(.amusement))
-        PassReader.swipe(swipedBy: child, forAccessTo: .parkArea(.amusement))
+        PassReader.swipe(pass: child.pass, forAccessTo: .parkArea(.amusement))
+        PassReader.swipe(pass: child.pass, forAccessTo: .parkArea(.kitchen))
 
     }
 }

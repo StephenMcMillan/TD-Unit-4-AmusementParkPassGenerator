@@ -81,18 +81,19 @@ enum EntrantType: PermissionsReadable {
 // MARK: - Entrant
 /// All Entrants to the park must have a valid access pass.
 protocol Entrant: class {
-    var pass: ParkPass { get }
-
+    var pass: ParkPass { get set }
 }
 
 // MARK: - Guests
 class Guest: Entrant {
-    let pass: ParkPass
+    var pass: ParkPass
     
     init(type: EntrantType = EntrantType.guest(.regular)) {
         self.pass = ParkPass(areaPermissions: type.areaPermissions,
                              ridePermissions: type.ridePermissions,
                              discountsAvailable: type.discountsAvailable)
+        
+        pass.holder = self
     }
 }
 
@@ -112,7 +113,7 @@ class ChildGuest: Guest, AgeIdentifiable {
         guard let dob = dateOfBirth else { throw InformationError.missingBirthday }
         self.dateOfBirth = dob
         
-        guard ChildGuest.isChild(dob: dob) else { throw InformationError.ageRequirementNotMet }
+        guard ChildGuest.isChild(dateOfBirth: dob) else { throw InformationError.ageRequirementNotMet }
         
         super.init(type: .guest(.child))
     }
@@ -150,5 +151,7 @@ class Employee: Entrant, Employable {
             pass = ParkPass(areaPermissions: type.areaPermissions,
                             ridePermissions: type.ridePermissions,
                             discountsAvailable: type.discountsAvailable)
+        
+            pass.holder = self
         }
 }
