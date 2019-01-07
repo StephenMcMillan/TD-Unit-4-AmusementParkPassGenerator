@@ -13,18 +13,28 @@ protocol AgeIdentifiable {
     var dateOfBirth: Date { get }
     
     static func isChild(dob: Date) -> Bool
+    func isBirthday() -> Bool
 }
 
 extension AgeIdentifiable {
     static func isChild(dob: Date) -> Bool {
         // Must be less than 5.
         let currentCalendar = Calendar.current
-        
         let age = currentCalendar.dateComponents([.year], from: dob, to: Date()).year ?? 0
-        
-        print(age)
-        
         return age < 5 ? true : false
+    }
+    
+    func isBirthday() -> Bool {
+        let today = Date()
+        let todayComponents = Calendar.current.dateComponents([.month, .day], from: today)
+        
+        let birthdayComponents = Calendar.current.dateComponents([.month, .day], from: dateOfBirth)
+        
+        if todayComponents.day == birthdayComponents.day && todayComponents.month == birthdayComponents.month {
+            return true
+        } else {
+            return false
+        }
     }
 }
 

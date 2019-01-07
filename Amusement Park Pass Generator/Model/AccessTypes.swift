@@ -37,7 +37,6 @@ enum AccessArea {
 // It makes more sense to keep discount privileges separate from areas that are accessible to entrants given that in a real world situation the system/pass reader for a cash register at a food or merchandise stall would have different logic to that of a pass reader on a door or gate at a ride.
 
 /// Types of Discount that Entrants can Receive
-
 enum PurchaseType {
     case food
     case merchandise

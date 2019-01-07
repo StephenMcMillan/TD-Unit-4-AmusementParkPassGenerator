@@ -80,8 +80,9 @@ enum EntrantType: PermissionsReadable {
 
 // MARK: - Entrant
 /// All Entrants to the park must have a valid access pass.
-protocol Entrant {
+protocol Entrant: class {
     var pass: ParkPass { get }
+
 }
 
 // MARK: - Guests
@@ -146,8 +147,8 @@ class Employee: Entrant, Employable {
             self.address = Address(streetAddress: streetAddress, city: city, state: state, zipCode: zipCode)
         
             self.type = type
-            self.pass = ParkPass(areaPermissions: type.areaPermissions,
-                                 ridePermissions: type.ridePermissions,
-                                 discountsAvailable: type.discountsAvailable)
+            pass = ParkPass(areaPermissions: type.areaPermissions,
+                            ridePermissions: type.ridePermissions,
+                            discountsAvailable: type.discountsAvailable)
         }
 }

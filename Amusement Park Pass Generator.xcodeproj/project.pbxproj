@@ -17,6 +17,7 @@
 		69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5ACA21E2B3EA001B50AF /* Entrants.swift */; };
 		69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */; };
 		69BD3BF921E39E2D00A5B608 /* PassReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BD3BF821E39E2D00A5B608 /* PassReader.swift */; };
+		69BD3BFB21E3F7CC00A5B608 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BD3BFA21E3F7CC00A5B608 /* Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		69AE5ACA21E2B3EA001B50AF /* Entrants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entrants.swift; sourceTree = "<group>"; };
 		69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkPass.swift; sourceTree = "<group>"; };
 		69BD3BF821E39E2D00A5B608 /* PassReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassReader.swift; sourceTree = "<group>"; };
+		69BD3BFA21E3F7CC00A5B608 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,10 +50,10 @@
 		69A03E4321E2D19A00D3EA79 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */,
+				69AE5ACA21E2B3EA001B50AF /* Entrants.swift */,
 				69BD3BF821E39E2D00A5B608 /* PassReader.swift */,
 				69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */,
-				69AE5ACA21E2B3EA001B50AF /* Entrants.swift */,
-				69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */,
 				69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */,
 			);
 			path = Model;
@@ -76,9 +78,10 @@
 		69AE5AB521E2AFE9001B50AF /* Amusement Park Pass Generator */ = {
 			isa = PBXGroup;
 			children = (
-				69A03E4321E2D19A00D3EA79 /* Model */,
 				69AE5AB621E2AFE9001B50AF /* AppDelegate.swift */,
+				69A03E4321E2D19A00D3EA79 /* Model */,
 				69AE5AB821E2AFE9001B50AF /* ViewController.swift */,
+				69BD3BFA21E3F7CC00A5B608 /* Tests.swift */,
 				69AE5ABA21E2AFE9001B50AF /* Main.storyboard */,
 				69AE5ABD21E2AFEB001B50AF /* Assets.xcassets */,
 				69AE5ABF21E2AFEB001B50AF /* LaunchScreen.storyboard */,
@@ -159,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69A03E4521E2D1F800D3EA79 /* InformationRequirements.swift in Sources */,
+				69BD3BFB21E3F7CC00A5B608 /* Tests.swift in Sources */,
 				69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */,
 				69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */,
 				69AE5AB921E2AFE9001B50AF /* ViewController.swift in Sources */,
