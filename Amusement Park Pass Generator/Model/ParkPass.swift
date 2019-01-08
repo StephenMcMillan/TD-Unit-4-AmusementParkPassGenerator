@@ -10,9 +10,10 @@ import Foundation
 
 // A common laguage between a pass card and a pass reader.
 
-struct ParkPass: PermissionsReadable {
+class ParkPass: PermissionsReadable {
     
     weak var holder: Entrant? = nil
+    var lastSwipe: Date? = nil
     
     var areaPermissions: [AccessArea.Area]
     var ridePermissions: [AccessArea.Ride]

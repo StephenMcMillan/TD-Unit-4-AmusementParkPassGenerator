@@ -8,19 +8,26 @@
 
 import Foundation
 
+// How to stop a pass being swiped more than 2 times... hmmm
+
 /// Models a pass reader machine that could be located at any location around the park. Eg: At food area, ride queue etc..
+
+// TODO: Create a PassReader error type so that swipe(pass: ParkPass... etc) can throw a passTimedOut error instead of a print statement.
+
 class PassReader {
     
-    // FIXME: Fix this. It doesn't make sense. Swipe should be a function that is called on a pass not an entrant...
-    
-    static func swipe(pass: ParkPass, forAccessTo secureArea: AccessArea) -> Bool {
+    static func swipe(pass: ParkPass, forAccessTo secureArea: AccessArea) -> Bool? {
         
-        // Switch on the secure area that the pass wants access to.
+        guard passIsUsable(pass) else {
+            print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
+            return nil
+        }
         
-        
+        alertIfBirthday(entrant: pass.holder)
         
         var accessStatus: Bool
-                
+        
+        // Switch on the secure area that the pass wants access to.
         switch secureArea {
             
         case .parkArea(let area):
@@ -30,16 +37,22 @@ class PassReader {
         }
         
         print("Access \(accessStatus ? "Granted" : "Denied")")
+        
+        pass.lastSwipe = Date()
         return accessStatus
         
     }
 }
 
 class KioskCashRegister {
-    // Kiosk cash register functions would be here.
     
     // During checkout the entrant can swipe to get x amount of discount off their purchase.
-    static func swipe(pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> Percentage {
+    static func swipe(pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> Percentage? {
+        
+        guard passIsUsable(pass) else {
+            print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
+            return nil
+        }
         
         alertIfBirthday(entrant: pass.holder)
         
@@ -56,8 +69,24 @@ class KioskCashRegister {
     }
 }
 
+// Timer Helper
+fileprivate func passIsUsable(_ pass: ParkPass?) -> Bool {
+    
+    guard let lastSwipeDate = pass?.lastSwipe else {
+        pass?.lastSwipe = Date()
+        return true
+    }
+    
+    guard lastSwipeDate.addingTimeInterval(5) <= Date() else {
+        pass?.lastSwipe = Date()
+        return false
+    }
+    
+    return true
+}
+
 // Birthday Helper
-func alertIfBirthday(entrant: Entrant?) {
+fileprivate func alertIfBirthday(entrant: Entrant?) {
     if let entrantWithBirthday = entrant as? AgeIdentifiable {
         if entrantWithBirthday.isBirthday {
             print("Happy Birthday from all of us here at the Park!")

@@ -9,7 +9,6 @@
 import Foundation
 
 // MARK: - Types of Entrants
-
 enum EntrantType: PermissionsReadable {
     
     case guest(Guest)

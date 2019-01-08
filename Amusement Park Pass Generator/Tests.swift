@@ -12,7 +12,7 @@ class Test {
     static func run() {
         // MARK: - Testing Guests
         /// Regular Guest
-                let firstEverGuest = Guest()
+//                let firstEverGuest = Guest()
         //                PassReader.swipe(swipedBy: firstEverGuest, forAccessTo: .parkArea(.kitchen))
         //                PassReader.swipe(swipedBy: firstEverGuest, forAccessTo: .parkArea(.amusement))
         //                PassReader.swipe(swipedBy: firstEverGuest, forAccessTo: .ride(.priorityQueueing))
@@ -71,11 +71,16 @@ class Test {
         //        PassReader.swipe(theBoss.pass, forAccessTo: .parkArea(.kitchen))
         //        KioskCashRegister.swipe(theBoss.pass, forPurchaseOf: .food)
         
-        // MARK: - Birthday Test
+        // MARK: - Birthday Test and Pass Timer test
         //Since Date() is today then this will show the happy birthday message.
-        let child = try! ChildGuest(dateOfBirth: Date())
-        PassReader.swipe(pass: child.pass, forAccessTo: .parkArea(.amusement))
-        PassReader.swipe(pass: child.pass, forAccessTo: .parkArea(.kitchen))
+//        let child = try! ChildGuest(dateOfBirth: Date())
+//        PassReader.swipe(pass: child.pass, forAccessTo: .parkArea(.amusement))
+//        PassReader.swipe(pass: child.pass, forAccessTo: .parkArea(.kitchen))
+//        
+//        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { (timer) in
+//            timer.invalidate()
+//            PassReader.swipe(pass: child.pass, forAccessTo: .ride(.all))
+//        }
 
     }
 }
