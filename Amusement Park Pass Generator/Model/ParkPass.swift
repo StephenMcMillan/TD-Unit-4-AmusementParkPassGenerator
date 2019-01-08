@@ -18,7 +18,7 @@ class ParkPass: PermissionsReadable {
     var areaPermissions: [AccessArea.Area]
     var ridePermissions: [AccessArea.Ride]
     var discountsAvailable: [Discount]
-    
+
     init (areaPermissions: [AccessArea.Area], ridePermissions: [AccessArea.Ride], discountsAvailable: [Discount]) {
         self.areaPermissions = areaPermissions
         self.ridePermissions = ridePermissions

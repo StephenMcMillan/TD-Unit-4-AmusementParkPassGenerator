@@ -16,7 +16,7 @@ import Foundation
 
 class PassReader {
     
-    static func swipe(pass: ParkPass, forAccessTo secureArea: AccessArea) -> Bool? {
+    static func swipe(_ pass: ParkPass, forAccessTo secureArea: AccessArea) -> Bool? {
         
         guard passIsUsable(pass) else {
             print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
@@ -47,7 +47,7 @@ class PassReader {
 class KioskCashRegister {
     
     // During checkout the entrant can swipe to get x amount of discount off their purchase.
-    static func swipe(pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> Percentage? {
+    static func swipe(_ pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> Percentage? {
         
         guard passIsUsable(pass) else {
             print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
