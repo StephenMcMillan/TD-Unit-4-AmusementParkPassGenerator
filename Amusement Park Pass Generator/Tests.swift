@@ -12,27 +12,27 @@ class Test {
     static func run() {
         // MARK: - Testing Guests
         /// Regular Guest
-//        let firstEverGuest = Guest()
-//        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.kitchen))
-//        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.amusement))
-//        PassReader.swipe(firstEverGuest.pass, forAccessTo: .ride(.priorityQueueing))
-//        KioskCashRegister.swipe(firstEverGuest.pass, forPurchaseOf: .food)
+        let firstEverGuest = Guest()
+        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.kitchen))
+        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.amusement))
+        PassReader.swipe(firstEverGuest.pass, forAccessTo: .ride(.priorityQueueing))
+        KioskCashRegister.swipe(firstEverGuest.pass, forPurchaseOf: .food)
         
-        /// VIP Guest
+        // VIP Guest
 //        let vipGuest = VIPGuest()
 //        PassReader.swipe(vipGuest.pass, forAccessTo: .parkArea(.office))
 //        PassReader.swipe(vipGuest.pass, forAccessTo: .ride(.priorityQueueing))
 //        KioskCashRegister.swipe(vipGuest.pass, forPurchaseOf: .merchandise)
         
-        /// Child Guests...
-        /// A valid child entrant...
+        // Child Guests...
+        // A valid child entrant...
 //        let birthDate = Calendar.current.date(from: DateComponents(year: 2015, month: 10, day: 01)) // DOB: 1st October 2015
 //        let child = try! ChildGuest(dateOfBirth: birthDate)
 //        PassReader.swipe(child.pass, forAccessTo: .parkArea(.kitchen))
 //        KioskCashRegister.swipe(child.pass, forPurchaseOf: .food)
         
         
-        /// An invalid child entrant...
+        // An invalid child entrant...
 //        let anotherBirthDate = Calendar.current.date(from: DateComponents(year: 2004, month: 02, day: 23)) // DOB: 23rd Feb 2004
 //
 //        do {
@@ -54,7 +54,7 @@ class Test {
 //        PassReader.swipe(maintenanceEmployee.pass, forAccessTo: .parkArea(.maintenance))
 //        KioskCashRegister.swipe(maintenanceEmployee.pass, forPurchaseOf: .merchandise)
         
-        /// Failing employee
+        // Failing employee
 //        do {
 //            let rideServicesEmployee = try Employee(type: .employee(.rideServices), firstName: "Alex", lastName: "Woodward", streetAddress: "102 Beechwood", city: nil, state: "California", zipCode: "CA 4231")
 //            PassReader.swipe(rideServicesEmployee.pass, forAccessTo: .parkArea(.rideControl))
@@ -72,14 +72,14 @@ class Test {
 //        KioskCashRegister.swipe(theBoss.pass, forPurchaseOf: .food)
         
         // MARK: - Birthday Test and Pass Timer test
-        //Since Date() is today then this will show the happy birthday message.
-//        let child = try! ChildGuest(dateOfBirth: Date())
-//        PassReader.swipe(child.pass, forAccessTo: .parkArea(.amusement))
-//        PassReader.swipe(child.pass, forAccessTo: .parkArea(.kitchen))
+        // Since Date() is today then this will show the happy birthday message.
+//        let child2 = try! ChildGuest(dateOfBirth: Date())
+//        PassReader.swipe(child2.pass, forAccessTo: .parkArea(.amusement))
+//        PassReader.swipe(child2.pass, forAccessTo: .parkArea(.kitchen)) // This will fail and call below will succeed..
 //
 //        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { (timer) in
 //            timer.invalidate()
-//            PassReader.swipe(child.pass, forAccessTo: .ride(.all))
+//            PassReader.swipe(child2.pass, forAccessTo: .ride(.all))
 //        }
 
     }
