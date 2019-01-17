@@ -15,10 +15,15 @@ enum EntrantType: PermissionsReadable {
     case employee(Employee)
     case manager(Manager)
     
+    case contractor(workingOn: ContractorProject)
+    case vendor(from: AuthorisedVendorCompany)
+    
     enum Guest: CaseIterable {
         case regular
         case vip
         case child
+        case seasonPassHolder
+        case senior
     }
     
     enum Employee: CaseIterable {
@@ -31,6 +36,21 @@ enum EntrantType: PermissionsReadable {
         case parkManager
     }
     
+    enum ContractorProject: CaseIterable {
+        case p1001
+        case p1002
+        case p1003
+        case p2001
+        case p2002
+    }
+    
+    enum AuthorisedVendorCompany: CaseIterable {
+        case Acme
+        case Orkin
+        case Fedex
+        case NWElectrical
+    }
+    
     var areaPermissions: [AccessArea.Area] {
         switch self {
         case .guest:
@@ -41,8 +61,35 @@ enum EntrantType: PermissionsReadable {
             
         case .employee(.rideServices):
             return [.amusement, .rideControl]
+        
+        case .employee(.maintenance):
+            return [.amusement, .kitchen, .rideControl, .maintenance]
+        
+        // Area Access For Contractors
+        case .contractor(workingOn: .p1001):
+            return [.amusement, .rideControl]
             
-        case .employee(.maintenance), .manager:
+        case .contractor(workingOn: .p1002):
+            return [.amusement, .rideControl, .maintenance]
+            
+        case .contractor(workingOn: .p2001):
+            return [.office]
+            
+        case .contractor(workingOn: .p2002):
+            return [.kitchen, .maintenance]
+            
+        // Area Access For Vendors
+        case .vendor(from: .Acme):
+            return [.kitchen]
+            
+        case .vendor(from: .Orkin):
+            return [.amusement, .rideControl, .kitchen]
+            
+        case .vendor(from: .Fedex):
+            return [.maintenance, .office]
+            
+        // ** CASE FOR ACCESS TO ALL AREAS ** (Highest Level of Clearance)
+        case .manager, .contractor(workingOn: .p1003), .vendor(from: .NWElectrical):
             return [.amusement, .kitchen, .rideControl, .maintenance, .office]
         }
     }
@@ -52,21 +99,27 @@ enum EntrantType: PermissionsReadable {
         case .guest(.regular), .guest(.child):
             return [.all]
             
-        case .guest(.vip):
+        case .guest(.vip), .guest(.senior), .guest(.seasonPassHolder):
             return [.all, .priorityQueueing]
 
         case .employee, .manager:
             return [.all]
+            
+        case .vendor, .contractor:
+            return []
         }
     }
     
     var discountsAvailable: [Discount] {
         switch self {
-        case .guest(.regular), .guest(.child):
+        case .guest(.regular), .guest(.child), .contractor, .vendor:
             return []
             
-        case .guest(.vip):
+        case .guest(.vip), .guest(.seasonPassHolder):
             return [Discount(appliesTo: .food, amount: 10), Discount(appliesTo: .merchandise, amount: 20)]
+            
+        case .guest(.senior):
+            return [Discount(appliesTo: .food, amount: 10), Discount(appliesTo: .merchandise, amount: 10)]
         
         case .employee:
             return [Discount(appliesTo: .food, amount: 15), Discount(appliesTo: .merchandise, amount: 25)]
