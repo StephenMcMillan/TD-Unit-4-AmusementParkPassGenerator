@@ -12,12 +12,12 @@ class Test {
     static func run() {
         // MARK: - Testing Guests
         /// Regular Guest
-        let firstEverGuest = Guest()
-        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.kitchen))
-        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.amusement))
-        PassReader.swipe(firstEverGuest.pass, forAccessTo: .ride(.priorityQueueing))
-        KioskCashRegister.swipe(firstEverGuest.pass, forPurchaseOf: .food)
-        
+//        let firstEverGuest = Guest()
+//        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.kitchen))
+//        PassReader.swipe(firstEverGuest.pass, forAccessTo: .parkArea(.amusement))
+//        PassReader.swipe(firstEverGuest.pass, forAccessTo: .ride(.priorityQueueing))
+//        KioskCashRegister.swipe(firstEverGuest.pass, forPurchaseOf: .food)
+//
         // VIP Guest
 //        let vipGuest = VIPGuest()
 //        PassReader.swipe(vipGuest.pass, forAccessTo: .parkArea(.office))
