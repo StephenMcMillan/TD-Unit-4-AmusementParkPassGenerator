@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Protocols describing what information an entrant must provide.
 protocol AgeIdentifiable {
-    var dateOfBirth: Date { get }
+    var dateOfBirth: Date? { get set }
     var isBirthday: Bool { get }
     
     static func isChild(dateOfBirth: Date) -> Bool
@@ -29,7 +29,8 @@ extension AgeIdentifiable {
         let today = Date()
         let todayComponents = Calendar.current.dateComponents([.month, .day], from: today)
         
-        let birthdayComponents = Calendar.current.dateComponents([.month, .day], from: dateOfBirth)
+        // TODO: FIX THIS IMPLICITY UNWRAP
+        let birthdayComponents = Calendar.current.dateComponents([.month, .day], from: dateOfBirth!)
         
         if todayComponents.day == birthdayComponents.day && todayComponents.month == birthdayComponents.month {
             return true
@@ -40,8 +41,8 @@ extension AgeIdentifiable {
 }
 
 protocol Nameable {
-    var firstName: String { get }
-    var lastName: String { get }
+    var firstName: String? { get set }
+    var lastName: String? { get set }
 }
 
 // Address
@@ -50,10 +51,35 @@ struct Address {
     var city: String
     var state: String
     var zipCode: String
+    
+    // Trys to create an Address or returns nil if fields are invalid.
+    init?(streetAddress: String?, city: String?, state: String?, zipCode: String?) {
+
+        if let street = streetAddress, let city = city, let state = state, let zipCode = zipCode {
+
+            guard street.count > 0 && city.count > 0 && state.count > 0 && zipCode.count > 0 else {
+                return nil
+            }
+
+            self.streetAddress = street
+            self.city = city
+            self.state = state
+            self.zipCode = zipCode
+
+
+        } else {
+            return nil
+        }
+    }
 }
 
 protocol Mailable {
-    var address: Address { get }
+    var address: Address? { get set }
+}
+
+protocol WorkTrackable {
+    var dateOfVisit: Date { get set }
+    var company: String { get set }
 }
 
 // MARK: - Errors describing missing information.

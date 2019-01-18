@@ -8,130 +8,139 @@
 
 import Foundation
 
-// MARK: - Types of Entrants
-enum EntrantType: PermissionsReadable {
-    
-    case guest(Guest)
-    case employee(Employee)
-    case manager(Manager)
-    
-    case contractor(workingOn: ContractorProject)
-    case vendor(from: AuthorisedVendorCompany)
-    
-    enum Guest: CaseIterable {
-        case regular
-        case vip
-        case child
-        case seasonPassHolder
-        case senior
-    }
-    
-    enum Employee: CaseIterable {
-        case foodServices
-        case rideServices
-        case maintenance
-    }
-    
-    enum Manager: CaseIterable {
-        case parkManager
-    }
-    
-    enum ContractorProject: CaseIterable {
-        case p1001
-        case p1002
-        case p1003
-        case p2001
-        case p2002
-    }
-    
-    enum AuthorisedVendorCompany: CaseIterable {
-        case Acme
-        case Orkin
-        case Fedex
-        case NWElectrical
-    }
-    
-    var areaPermissions: [AccessArea.Area] {
-        switch self {
-        case .guest:
-            return [.amusement]
-            
-        case .employee(.foodServices):
-            return [.amusement, .kitchen]
-            
-        case .employee(.rideServices):
-            return [.amusement, .rideControl]
-        
-        case .employee(.maintenance):
-            return [.amusement, .kitchen, .rideControl, .maintenance]
-        
-        // Area Access For Contractors
-        case .contractor(workingOn: .p1001):
-            return [.amusement, .rideControl]
-            
-        case .contractor(workingOn: .p1002):
-            return [.amusement, .rideControl, .maintenance]
-            
-        case .contractor(workingOn: .p2001):
-            return [.office]
-            
-        case .contractor(workingOn: .p2002):
-            return [.kitchen, .maintenance]
-            
-        // Area Access For Vendors
-        case .vendor(from: .Acme):
-            return [.kitchen]
-            
-        case .vendor(from: .Orkin):
-            return [.amusement, .rideControl, .kitchen]
-            
-        case .vendor(from: .Fedex):
-            return [.maintenance, .office]
-            
-        // ** CASE FOR ACCESS TO ALL AREAS ** (Highest Level of Clearance)
-        case .manager, .contractor(workingOn: .p1003), .vendor(from: .NWElectrical):
-            return [.amusement, .kitchen, .rideControl, .maintenance, .office]
-        }
-    }
-    
-    var ridePermissions: [AccessArea.Ride] {
-        switch self {
-        case .guest(.regular), .guest(.child):
-            return [.all]
-            
-        case .guest(.vip), .guest(.senior), .guest(.seasonPassHolder):
-            return [.all, .priorityQueueing]
+// MARK: - Entrants / People
+protocol Person: class {
+    var type: EntrantType { get set }
+    var pass: ParkPass { get set }
+}
 
-        case .employee, .manager:
-            return [.all]
-            
-        case .vendor, .contractor:
-            return []
-        }
-    }
+// Guests
+class Guest: Person {
     
-    var discountsAvailable: [Discount] {
-        switch self {
-        case .guest(.regular), .guest(.child), .contractor, .vendor:
-            return []
-            
-        case .guest(.vip), .guest(.seasonPassHolder):
-            return [Discount(appliesTo: .food, amount: 10), Discount(appliesTo: .merchandise, amount: 20)]
-            
-        case .guest(.senior):
-            return [Discount(appliesTo: .food, amount: 10), Discount(appliesTo: .merchandise, amount: 10)]
-        
-        case .employee:
-            return [Discount(appliesTo: .food, amount: 15), Discount(appliesTo: .merchandise, amount: 25)]
-        
-        case .manager:
-            return [Discount(appliesTo: .food, amount: 25), Discount(appliesTo: .merchandise, amount: 25)]
-        }
+    var type: EntrantType
+    var pass: ParkPass
+    
+    init(type: EntrantType.Guest) {
+        self.type = EntrantType.guest(type)
+        self.pass = ParkPass(holder: self.type)
+        pass.holder = self
     }
 }
 
-// MARK: - Entrant
-/// All Entrants to the park must have a valid access pass.
+class ChildGuest: Guest, AgeIdentifiable {    
+    
+    var dateOfBirth: Date?
+    
+    init() {
+        super.init(type: .child)
+    }
+}
+
+class SeniorGuest: Guest, Nameable, AgeIdentifiable {
+    
+    var firstName: String?
+    var lastName: String?
+    var dateOfBirth: Date?
+    
+    init() {
+        super.init(type: .senior)
+    }
+}
+
+class SeasonPassGuest: Guest, Nameable, Mailable {
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+    
+    init() {
+        super.init(type: .seasonPassHolder)
+    }
+}
+
+// Employees
+typealias Employable = Person & Nameable & Mailable
+
+class Employee: Employable {
+    
+    var type: EntrantType
+    var pass: ParkPass
+    
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+
+    init(type: EntrantType.Employee) {
+        self.type = EntrantType.employee(type)
+        self.pass = ParkPass(holder: self.type)
+        pass.holder = self
+    }
+    
+}
+
+class Manager: Employable {
+    
+    var type: EntrantType
+    var pass: ParkPass
+    
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+    
+    init(type: EntrantType.Manager) {
+        self.type = EntrantType.manager(type)
+        self.pass = ParkPass(holder: self.type)
+        pass.holder = self
+    }
+    
+    deinit {
+        print("These die off fine..")
+    }
+    
+}
+
+class Contractor: Employable {
+    
+    var type: EntrantType
+    var pass: ParkPass
+    
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+        
+    init(type: EntrantType.ContractorProject) {
+        self.type = EntrantType.contractor(workingOn: type)
+        self.pass = ParkPass(holder: self.type)
+        pass.holder = self
+    }
+}
+
+
+
+// Vendor
+class Vendor: Person, Nameable, AgeIdentifiable, WorkTrackable {
+    var type: EntrantType
+    var pass: ParkPass
+    
+    var firstName: String?
+    var lastName: String?
+    var dateOfBirth: Date?
+    
+    var dateOfVisit: Date
+    var company: String
+    
+    init(company: EntrantType.AuthorisedVendorCompany) {
+        self.type = EntrantType.vendor(from: company)
+        self.company = company.rawValue
+        self.dateOfVisit = Date()
+        
+        self.pass = ParkPass(holder: self.type)
+        pass.holder = self
+    }
+}
+
+
+/* old implementation
+
 protocol Entrant: class {
     var pass: ParkPass { get set }
 }
@@ -173,7 +182,7 @@ class ChildGuest: Guest, AgeIdentifiable {
 
 // MARK: - Employees
 
-protocol Employable: Nameable, Mailable {}
+typealias Employable = Nameable & Mailable
 
 // Hourly Employees and Managers have the same style of set-up so they're differentiated using the type property.
 class Employee: Entrant, Employable {
@@ -207,3 +216,30 @@ class Employee: Entrant, Employable {
             pass.holder = self
         }
 }
+
+class Person {
+    var type: EntrantType
+    
+    init(type: EntrantType) {
+        self.type = type
+    }
+}
+
+let person = Person(type: EntrantType.employee(.foodServices))
+
+
+class NewGuest: Person {
+    
+    init(type: EntrantType.Guest) {
+        super.init(type: EntrantType.guest(type))
+    }
+}
+
+class NewEmployee: Person {
+    
+    init(type: EntrantType.Employee) {
+        super.init(type: EntrantType.employee(type))
+    }
+}
+*/
+

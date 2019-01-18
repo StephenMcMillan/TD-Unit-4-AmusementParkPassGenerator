@@ -46,7 +46,6 @@ struct Discount {
     var amount: Percentage
 }
 
-let foodDiscount = Discount(appliesTo: .food, amount: 25)
 typealias Percentage = Int
 
 

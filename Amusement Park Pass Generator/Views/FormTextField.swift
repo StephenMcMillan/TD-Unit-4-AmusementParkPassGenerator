@@ -46,8 +46,23 @@ class FormTextField: UITextField {
         layer.cornerRadius = 4
         layer.masksToBounds = false
         layer.borderWidth = 1.0
-        layer.borderColor = UIColor.red.cgColor
     }
     
-
+    
+    // MARK: - Highlighting Helper
+    var isRequired: Bool {
+        get {
+            return isEnabled
+        }
+        
+        set {
+            if newValue {
+                backgroundColor = .white
+                isEnabled = newValue
+            } else {
+                backgroundColor = .clear
+                isEnabled = newValue
+            }
+        }
+    }
 }

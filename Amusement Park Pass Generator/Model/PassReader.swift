@@ -86,7 +86,7 @@ fileprivate func passIsUsable(_ pass: ParkPass?) -> Bool {
 }
 
 // Birthday Helper
-fileprivate func alertIfBirthday(entrant: Entrant?) {
+fileprivate func alertIfBirthday(entrant: Person?) {
     if let entrantWithBirthday = entrant as? AgeIdentifiable {
         if entrantWithBirthday.isBirthday {
             print("Happy Birthday from all of us here at the Park!")

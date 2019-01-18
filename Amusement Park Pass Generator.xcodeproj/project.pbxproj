@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		699E491C21F012CC0079709E /* PassGenerationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699E491B21F012CC0079709E /* PassGenerationViewController.swift */; };
 		699E491E21F012E40079709E /* ReviewPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699E491D21F012E40079709E /* ReviewPassViewController.swift */; };
+		699E492221F0D9B40079709E /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699E492121F0D9B40079709E /* Helpers.swift */; };
+		699E492421F121BC0079709E /* EntrantPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699E492321F121BB0079709E /* EntrantPermissions.swift */; };
 		69A03E4521E2D1F800D3EA79 /* InformationRequirements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */; };
 		69AE5AB721E2AFE9001B50AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5AB621E2AFE9001B50AF /* AppDelegate.swift */; };
 		69AE5ABC21E2AFE9001B50AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69AE5ABA21E2AFE9001B50AF /* Main.storyboard */; };
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		699E491B21F012CC0079709E /* PassGenerationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassGenerationViewController.swift; sourceTree = "<group>"; };
 		699E491D21F012E40079709E /* ReviewPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPassViewController.swift; sourceTree = "<group>"; };
+		699E492121F0D9B40079709E /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		699E492321F121BB0079709E /* EntrantPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrantPermissions.swift; sourceTree = "<group>"; };
 		69A03E4421E2D1F800D3EA79 /* InformationRequirements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationRequirements.swift; sourceTree = "<group>"; };
 		69AE5AB321E2AFE9001B50AF /* Amusement Park Pass Generator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Amusement Park Pass Generator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69AE5AB621E2AFE9001B50AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				69F760FA21EFDE120066ED72 /* FormTextField.swift */,
+				699E492121F0D9B40079709E /* Helpers.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -72,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				69AE5AC821E2B1CA001B50AF /* AccessTypes.swift */,
+				699E492321F121BB0079709E /* EntrantPermissions.swift */,
 				69AE5ACA21E2B3EA001B50AF /* Entrants.swift */,
 				69BD3BF821E39E2D00A5B608 /* PassReader.swift */,
 				69AE5ACC21E2C1C8001B50AF /* ParkPass.swift */,
@@ -186,9 +192,11 @@
 				69A03E4521E2D1F800D3EA79 /* InformationRequirements.swift in Sources */,
 				699E491E21F012E40079709E /* ReviewPassViewController.swift in Sources */,
 				69F760FB21EFDE120066ED72 /* FormTextField.swift in Sources */,
+				699E492421F121BC0079709E /* EntrantPermissions.swift in Sources */,
 				69BD3BFB21E3F7CC00A5B608 /* Tests.swift in Sources */,
 				69AE5ACD21E2C1C8001B50AF /* ParkPass.swift in Sources */,
 				69AE5ACB21E2B3EA001B50AF /* Entrants.swift in Sources */,
+				699E492221F0D9B40079709E /* Helpers.swift in Sources */,
 				69BD3BF921E39E2D00A5B608 /* PassReader.swift in Sources */,
 				69AE5AB721E2AFE9001B50AF /* AppDelegate.swift in Sources */,
 				699E491C21F012CC0079709E /* PassGenerationViewController.swift in Sources */,
