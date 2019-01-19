@@ -1,5 +1,5 @@
 ## Amusement Park Pass Generator
-This project is part 1 of 2 and the task was to model an amusement park pass generator.
+This project is a combination of Unit 4 and 5 from the iOS Tech Degree.
 
 ### Approach
 The idea is that various types of entrants such as guests and employees can enter the park and access various areas such as open and restricted areas based on the permissions assigned to their group.
