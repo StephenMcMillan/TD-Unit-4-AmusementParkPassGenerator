@@ -8,149 +8,148 @@
 
 import Foundation
 
-// MARK: - Types of Entrants
-enum EntrantType: PermissionsReadable {
-    
-    case guest(Guest)
-    case employee(Employee)
-    case manager(Manager)
-    
-    enum Guest: CaseIterable {
-        case regular
-        case vip
-        case child
-    }
-    
-    enum Employee: CaseIterable {
-        case foodServices
-        case rideServices
-        case maintenance
-    }
-    
-    enum Manager: CaseIterable {
-        case parkManager
-    }
-    
-    var areaPermissions: [AccessArea.Area] {
-        switch self {
-        case .guest:
-            return [.amusement]
-            
-        case .employee(.foodServices):
-            return [.amusement, .kitchen]
-            
-        case .employee(.rideServices):
-            return [.amusement, .rideControl]
-            
-        case .employee(.maintenance), .manager:
-            return [.amusement, .kitchen, .rideControl, .maintenance, .office]
-        }
-    }
-    
-    var ridePermissions: [AccessArea.Ride] {
-        switch self {
-        case .guest(.regular), .guest(.child):
-            return [.all]
-            
-        case .guest(.vip):
-            return [.all, .priorityQueueing]
-
-        case .employee, .manager:
-            return [.all]
-        }
-    }
-    
-    var discountsAvailable: [Discount] {
-        switch self {
-        case .guest(.regular), .guest(.child):
-            return []
-            
-        case .guest(.vip):
-            return [Discount(appliesTo: .food, amount: 10), Discount(appliesTo: .merchandise, amount: 20)]
-        
-        case .employee:
-            return [Discount(appliesTo: .food, amount: 15), Discount(appliesTo: .merchandise, amount: 25)]
-        
-        case .manager:
-            return [Discount(appliesTo: .food, amount: 25), Discount(appliesTo: .merchandise, amount: 25)]
-        }
-    }
-}
-
-// MARK: - Entrant
-/// All Entrants to the park must have a valid access pass.
-protocol Entrant: class {
+// MARK: - Entrants / People
+protocol Person: class {
+    var type: EntrantType { get }
     var pass: ParkPass { get set }
+    
+    var description: String { get }
 }
 
-// MARK: - Guests
-class Guest: Entrant {
-    var pass: ParkPass
+// Guests
+class Guest: Person {
     
-    init(type: EntrantType = EntrantType.guest(.regular)) {
-        self.pass = ParkPass(areaPermissions: type.areaPermissions,
-                             ridePermissions: type.ridePermissions,
-                             discountsAvailable: type.discountsAvailable)
-        
+    var type: EntrantType
+    var pass: ParkPass
+    var description: String
+    
+    init(type: EntrantType.Guest) {
+        self.type = EntrantType.guest(type)
+        self.pass = ParkPass(holder: self.type)
+        description = "Park Visitor: \(type.rawValue)"
         pass.holder = self
     }
 }
 
-class VIPGuest: Guest {
+class ChildGuest: Guest, AgeIdentifiable {    
+    
+    var dateOfBirth: Date?
+    
     init() {
-        super.init(type: .guest(.vip))
+        super.init(type: .child)
     }
 }
 
-class ChildGuest: Guest, AgeIdentifiable {
+class SeniorGuest: Guest, Nameable, AgeIdentifiable {
     
-    var dateOfBirth: Date
+    var firstName: String?
+    var lastName: String?
+    var dateOfBirth: Date?
     
-    init(dateOfBirth: Date?) throws {
-        
-        // Children must
-        guard let dob = dateOfBirth else { throw InformationError.missingBirthday }
-        self.dateOfBirth = dob
-        
-        guard ChildGuest.isChild(dateOfBirth: dob) else { throw InformationError.ageRequirementNotMet }
-        
-        super.init(type: .guest(.child))
+    init() {
+        super.init(type: .senior)
     }
 }
 
-// MARK: - Employees
+class SeasonPassGuest: Guest, Nameable, Mailable {
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+    
+    init() {
+        super.init(type: .seasonPassHolder)
+    }
+}
 
-protocol Employable: Nameable, Mailable {}
+// Employees
+typealias Employable = Person & Nameable & Mailable & AgeIdentifiable & HasSocialSecurityNumber
 
-// Hourly Employees and Managers have the same style of set-up so they're differentiated using the type property.
-class Employee: Entrant, Employable {
+class Employee: Employable {
     
     var type: EntrantType
     var pass: ParkPass
+    var description: String
     
-    var firstName: String
-    var lastName: String
-    var address: Address
+    var dateOfBirth: Date?
+    var ssn: Int?
     
-    init(type: EntrantType, firstName: String?, lastName: String?, streetAddress: String?, city: String?, state: String?, zipCode: String?) throws {
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+
+    init(type: EntrantType.Employee) {
+        self.type = EntrantType.employee(type)
+        self.pass = ParkPass(holder: self.type)
+        description = "Employee: \(type.rawValue)"
+        pass.holder = self
+    }
     
-            guard let firstName = firstName else { throw InformationError.missingFirstName }
-            guard let lastName = lastName else { throw InformationError.missingLastName }
+}
+
+class Manager: Employable {
     
-            guard let streetAddress = streetAddress else { throw InformationError.missingStreetAddress }
-            guard let city = city else { throw InformationError.missingCity }
-            guard let state = state else { throw InformationError.missingState }
-            guard let zipCode = zipCode else { throw InformationError.missingZipCode }
+    var type: EntrantType
+    var pass: ParkPass
+    var description: String
     
-            self.firstName = firstName
-            self.lastName = lastName
-            self.address = Address(streetAddress: streetAddress, city: city, state: state, zipCode: zipCode)
+    var dateOfBirth: Date?
+    var ssn: Int?
+    
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
+    
+    init(type: EntrantType.Manager) {
+        self.type = EntrantType.manager(type)
+        self.pass = ParkPass(holder: self.type)
+        self.description = type.rawValue
+        pass.holder = self
+    }
+}
+
+class Contractor: Employable {
+    
+    var type: EntrantType
+    var pass: ParkPass
+    var description: String
+    
+    var dateOfBirth: Date?
+    var ssn: Int?
+    
+    var firstName: String?
+    var lastName: String?
+    var address: Address?
         
-            self.type = type
-            pass = ParkPass(areaPermissions: type.areaPermissions,
-                            ridePermissions: type.ridePermissions,
-                            discountsAvailable: type.discountsAvailable)
+    init(type: EntrantType.ContractorProject) {
+        self.type = EntrantType.contractor(workingOn: type)
+        self.pass = ParkPass(holder: self.type)
+        self.description = "Contractor working on \(type.rawValue)"
+        pass.holder = self
+    }
+}
+
+
+
+// Vendor
+class Vendor: Person, Nameable, AgeIdentifiable, WorkTrackable {
+    var type: EntrantType
+    var pass: ParkPass
+    var description: String
+    
+    var firstName: String?
+    var lastName: String?
+    var dateOfBirth: Date?
+    
+    var dateOfVisit: Date
+    var company: String
+    
+    init(company: EntrantType.AuthorisedVendorCompany) {
+        self.type = EntrantType.vendor(from: company)
+        self.company = company.rawValue
+        self.dateOfVisit = Date()
         
-            pass.holder = self
-        }
+        self.pass = ParkPass(holder: self.type)
+        self.description = "Authorised Vendor from \(company.rawValue)"
+        pass.holder = self
+    }
 }

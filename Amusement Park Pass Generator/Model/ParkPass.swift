@@ -12,7 +12,7 @@ import Foundation
 
 class ParkPass: PermissionsReadable {
     
-    weak var holder: Entrant? = nil
+    weak var holder: Person? = nil
     var lastSwipe: Date? = nil
     
     var areaPermissions: [AccessArea.Area]
@@ -23,6 +23,10 @@ class ParkPass: PermissionsReadable {
         self.areaPermissions = areaPermissions
         self.ridePermissions = ridePermissions
         self.discountsAvailable = discountsAvailable
+    }
+    
+    convenience init(holder: EntrantType) {
+        self.init(areaPermissions: holder.areaPermissions, ridePermissions: holder.ridePermissions, discountsAvailable: holder.discountsAvailable)
     }
 }
 

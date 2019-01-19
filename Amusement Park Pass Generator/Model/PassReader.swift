@@ -13,14 +13,13 @@ import Foundation
 /// Models a pass reader machine that could be located at any location around the park. Eg: At food area, ride queue etc..
 
 // TODO: Create a PassReader error type so that swipe(pass: ParkPass... etc) can throw a passTimedOut error instead of a print statement.
-
 class PassReader {
     
-    static func swipe(_ pass: ParkPass, forAccessTo secureArea: AccessArea) -> Bool? {
+    static func swipe(_ pass: ParkPass, forAccessTo secureArea: AccessArea) -> SwipeResult {
         
         guard passIsUsable(pass) else {
             print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
-            return nil
+            return .timedOut
         }
         
         alertIfBirthday(entrant: pass.holder)
@@ -39,7 +38,7 @@ class PassReader {
         print("Access \(accessStatus ? "Granted" : "Denied")")
         
         pass.lastSwipe = Date()
-        return accessStatus
+        return accessStatus ? SwipeResult.accessGranted : SwipeResult.accessDenied
         
     }
 }
@@ -47,11 +46,10 @@ class PassReader {
 class KioskCashRegister {
     
     // During checkout the entrant can swipe to get x amount of discount off their purchase.
-    static func swipe(_ pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> Percentage? {
+    static func swipe(_ pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> SwipeResult {
         
         guard passIsUsable(pass) else {
-            print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
-            return nil
+            return .timedOut // FIXME: Change this to a consisten swipe result that prints out an alert, nil could be anything.
         }
         
         alertIfBirthday(entrant: pass.holder)
@@ -60,12 +58,36 @@ class KioskCashRegister {
             if case discount.appliesTo = purchase {
             
                 print("Entrant is entitled to \(discount.amount)% off \(discount.appliesTo) purchases. :)")
-                return discount.amount
+                return SwipeResult.discountAvailable(discount: discount)
             }
         }
         
         print("Entrant is not entitled to discounts of any kind. :(")
-        return 0
+        pass.lastSwipe = Date()
+        return SwipeResult.noDiscount
+    }
+}
+
+// Swipe Results
+enum SwipeResult {
+    case accessGranted
+    case accessDenied
+    case discountAvailable(discount: Discount)
+    case noDiscount
+    case timedOut
+}
+
+extension SwipeResult: Equatable {
+    static func == (lhs: SwipeResult, rhs: SwipeResult) -> Bool {
+        switch (lhs, rhs) {
+            
+        case (.accessGranted, .accessGranted), (.accessDenied, .accessDenied), (.noDiscount, .noDiscount), (.timedOut, .timedOut):
+            return true
+        case (discountAvailable(let discountLHS), discountAvailable(let discountRHS)):
+            return discountRHS == discountLHS ? true : false
+        default:
+            return false
+        }
     }
 }
 
@@ -86,7 +108,7 @@ fileprivate func passIsUsable(_ pass: ParkPass?) -> Bool {
 }
 
 // Birthday Helper
-fileprivate func alertIfBirthday(entrant: Entrant?) {
+fileprivate func alertIfBirthday(entrant: Person?) {
     if let entrantWithBirthday = entrant as? AgeIdentifiable {
         if entrantWithBirthday.isBirthday {
             print("Happy Birthday from all of us here at the Park!")
