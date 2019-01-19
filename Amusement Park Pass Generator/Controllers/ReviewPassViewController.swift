@@ -195,3 +195,9 @@ class ReviewPassViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 }
+
+extension ReviewPassViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}

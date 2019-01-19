@@ -412,6 +412,12 @@ class PassGenerationViewController: UIViewController {
     }
 }
 
+extension PassGenerationViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}
+
 extension PassGenerationViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
