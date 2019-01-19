@@ -9,10 +9,14 @@
 import UIKit
 
 class PassGenerationViewController: UIViewController {
+    
+    static let overviewSegueIdentifier = "showOverviewScreen"
+    
+    // Scroll View
+    @IBOutlet weak var formScrollView: UIScrollView!
 
     // Outlet for Buttons on the Parent Selection Bar
     @IBOutlet var highLevelEntrantTypeButtons: [UIButton]!
-    
     
     // Outlet for Buttons on the Child Selection Bar    
     @IBOutlet weak var subEntrantStack: UIStackView!
@@ -97,6 +101,9 @@ class PassGenerationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(PassGenerationViewController.keyboardAppeared), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PassGenerationViewController.keyboardDisappeared), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -205,7 +212,6 @@ class PassGenerationViewController: UIViewController {
         
         // It's relatively safe to work with this string since it comes from the ENUM raw value.
         guard let entrantDescription = sender.titleLabel?.text else { return }
-        print(entrantDescription)
         
         if let guestType = EntrantType.Guest(rawValue: entrantDescription) {
             
@@ -267,14 +273,12 @@ class PassGenerationViewController: UIViewController {
         do {
             try parseFieldData()
             
-            dump(entrantBeingCreated)
+            // dump(entrantBeingCreated)
             
             presentOverviewScreen()
             
         } catch let error {
-            let a = error.localizedDescription
-            print(a)
-            showAlert(description: a)
+            showAlert(description: error.localizedDescription)
         }
     }
     
@@ -288,8 +292,6 @@ class PassGenerationViewController: UIViewController {
     }
     
     // MARK: - Present Overview Screen
-    static let overviewSegueIdentifier = "showOverviewScreen"
-    
     func presentOverviewScreen() {
         performSegue(withIdentifier: PassGenerationViewController.overviewSegueIdentifier, sender: nil)
     }
@@ -319,7 +321,6 @@ class PassGenerationViewController: UIViewController {
             }
             
             entrantWithAge.dateOfBirth = dateOfBirth
-            print(dateOfBirth)
         }
         
         // 2. Social Security Number
@@ -391,5 +392,29 @@ class PassGenerationViewController: UIViewController {
         
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - Deal with the Keyboard
+    @objc func keyboardAppeared(_ notification: Notification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            let edgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
+            
+            formScrollView.contentInset = edgeInsets
+            formScrollView.scrollIndicatorInsets = edgeInsets
+        }
+    }
+    
+    @objc func keyboardDisappeared() {
+        UIView.animate(withDuration: 0.5) {
+            self.formScrollView.contentInset = UIEdgeInsets.zero
+            self.formScrollView.scrollIndicatorInsets = UIEdgeInsets.zero
+        }
+    }
+}
+
+extension PassGenerationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

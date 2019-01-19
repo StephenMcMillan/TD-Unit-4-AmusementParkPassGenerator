@@ -8,6 +8,8 @@
 
 import Foundation
 
+// NOTE: These test cases have not been updated for unit 5. Use UI to test objects.
+
 class Test {
     static func run() {
         // MARK: - Testing Guests
