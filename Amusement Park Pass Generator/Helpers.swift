@@ -11,7 +11,6 @@ import UIKit
 /// Creates and returns a button with button styling applied for the sub-header menu.
 
 extension UIButton {
-    
     static func createSubEntrantButton(withTitle title: String) -> UIButton {
         let button = UIButton.init(type: .system)
         button.setTitle(title, for: .normal)
@@ -21,4 +20,11 @@ extension UIButton {
     }
 }
 
+extension Date {
+    static func create(from stringRepresentation: String) -> Date? {
+        let dateFormtatter = DateFormatter()
+        dateFormtatter.dateFormat = "dd - MM - yyyy"
+        return dateFormtatter.date(from: stringRepresentation)
+    }
+}
 

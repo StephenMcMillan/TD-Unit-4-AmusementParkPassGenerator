@@ -12,21 +12,12 @@ import Foundation
 typealias EntrantSubType = RawRepresentable & CaseIterable
 
 enum EntrantType: PermissionsReadable {
-    
 
-    
     case guest(Guest)
     case employee(Employee)
     case manager(Manager)
     case contractor(workingOn: ContractorProject)
     case vendor(from: AuthorisedVendorCompany)
-    
-//
-//    static func returnV(string: String) -> EntrantType {
-//        if let guestType = EntrantType.Guest(rawValue: string) {
-//            return guestType
-//        } else if let
-//    }
     
     enum Guest: String, EntrantSubType {
         case regular = "Regular"

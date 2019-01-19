@@ -15,8 +15,6 @@ class PassGenerationViewController: UIViewController {
     
     
     // Outlet for Buttons on the Child Selection Bar    
-    @IBOutlet weak var subEntrantStackContainer: UIView!
-//    var someStack: UIStackView?
     @IBOutlet weak var subEntrantStack: UIStackView!
     
     // MARK: - Form Outlets
@@ -29,6 +27,17 @@ class PassGenerationViewController: UIViewController {
         didSet {
             setLabels([dateOfBirthLabel], toRequired: dateOfBirthRequired)
             setFields([dateOfBirthField], toRequired: dateOfBirthRequired)
+        }
+    }
+    
+    // SSN Outlets
+    @IBOutlet weak var ssnLabel: UILabel!
+    @IBOutlet weak var ssnField: FormTextField!
+    
+    var socialSecurityRequired: Bool = false {
+        didSet {
+            setLabels([ssnLabel], toRequired: socialSecurityRequired)
+            setFields([ssnField], toRequired: socialSecurityRequired)
         }
     }
     
@@ -82,14 +91,23 @@ class PassGenerationViewController: UIViewController {
         }
     }
     
-    // -------
-    
     var entrantBeingCreated: Person?
 
+    // MARK: - View Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        // Cleanup the Form (Mainly utilized when returning from the overview view.
+        entrantBeingCreated = nil
         updateFieldStates()
+        clearAll()
+        clearSubEntrantStack()
+        resetEntrantButtons()
     }
     
     // MARK: - Form Highlighting / Unhighlighting Helpers
@@ -105,6 +123,7 @@ class PassGenerationViewController: UIViewController {
         guard let entrantBeingCreated = entrantBeingCreated else {
             dateOfBirthRequired = false
             projectSectionRequired = false
+            socialSecurityRequired = false
             nameSectionRequired = false
             companySectionRequired = false
             addressSectionRequired = false
@@ -113,16 +132,30 @@ class PassGenerationViewController: UIViewController {
 
         dateOfBirthRequired = entrantBeingCreated is AgeIdentifiable
         projectSectionRequired = entrantBeingCreated is Contractor
+        socialSecurityRequired = entrantBeingCreated is HasSocialSecurityNumber
         nameSectionRequired = entrantBeingCreated is Nameable
         companySectionRequired = entrantBeingCreated is Vendor
         addressSectionRequired = entrantBeingCreated is Mailable
     }
     
+    // MARK: - Clean Up Functions
     // Clears all fields of their text
     func clearAll() {
-        let fields = [dateOfBirthField, projectNumberField, companyField] + nameFields + addressFields
+        let fields = [dateOfBirthField, projectNumberField, companyField, ssnField] + nameFields + addressFields
         fields.forEach {
             $0.text = ""
+        }
+    }
+    
+    func resetEntrantButtons() {
+        highLevelEntrantTypeButtons.forEach {
+            $0.alpha = 1.0
+        }
+    }
+    
+    func clearSubEntrantStack() {
+        subEntrantStack.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
         }
     }
     
@@ -152,22 +185,17 @@ class PassGenerationViewController: UIViewController {
     
     // Logic for laying out the various sub-entrant buttons (these vary depending on the parent entrant selected)
     func layoutSubEntrantSelectionButtons<SubEntrant: EntrantSubType>(using subEntrants: [SubEntrant]) {
-        // Clear Existing Sub-Entrant Buttons
-        subEntrantStack.arrangedSubviews.forEach {
-            $0.removeFromSuperview()
-        }
+
+        clearSubEntrantStack()
         
         subEntrants.forEach {
             let button = UIButton.createSubEntrantButton(withTitle: "\($0.rawValue)")
             button.addTarget(self, action: #selector(subEntrantSelected(_:)), for: .touchUpInside)
             subEntrantStack.addArrangedSubview(button)
         }
-        
     }
     
     @objc func subEntrantSelected(_ sender: UIButton) {
-        // Need to determine what type of person we're creating, this is gonna get realllll long...
-        
         // Dim the other buttons.
         subEntrantStack.arrangedSubviews.forEach {
             $0.alpha = ($0 == sender) ? 1.0 : 0.5
@@ -208,20 +236,20 @@ class PassGenerationViewController: UIViewController {
             entrantBeingCreated = Manager(type: managerType)
 
         } else if let contractorType = EntrantType.ContractorProject(rawValue: entrantDescription) {
-            projectNumberField.text = contractorType.rawValue
+            // Some Contractor
+            projectNumberField.text = contractorType.rawValue // Since we know the project we can pre-fill it.
             entrantBeingCreated = Contractor(type: contractorType)
             
         } else if let vendorCompany = EntrantType.AuthorisedVendorCompany(rawValue: entrantDescription) {
             // Some Vendor
+            companyField.text = vendorCompany.rawValue // Pre-fill company.
             entrantBeingCreated = Vendor(company: vendorCompany)
         }
         
         updateFieldStates()
         
     }
-    
-    
-    
+
     // MARK: - Bottom Button Actions
     @IBAction func generatePass() {
         
@@ -241,6 +269,8 @@ class PassGenerationViewController: UIViewController {
             
             dump(entrantBeingCreated)
             
+            presentOverviewScreen()
+            
         } catch let error {
             let a = error.localizedDescription
             print(a)
@@ -249,6 +279,27 @@ class PassGenerationViewController: UIViewController {
     }
     
     @IBAction func populateData() {
+        guard entrantBeingCreated != nil else {
+            showAlert(description: "Please select an Entrant type before trying to populate information automatically.")
+            return
+        }
+        
+        populateFieldsUsingDummyData()
+    }
+    
+    // MARK: - Present Overview Screen
+    static let overviewSegueIdentifier = "showOverviewScreen"
+    
+    func presentOverviewScreen() {
+        performSegue(withIdentifier: PassGenerationViewController.overviewSegueIdentifier, sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == PassGenerationViewController.overviewSegueIdentifier else { return }
+        
+        if let overviewViewController = segue.destination as? ReviewPassViewController {
+            overviewViewController.entrant = entrantBeingCreated
+        }
     }
     
     // Mark: - Perform checks on the fields
@@ -271,7 +322,17 @@ class PassGenerationViewController: UIViewController {
             print(dateOfBirth)
         }
         
-        // 2. Project Number
+        // 2. Social Security Number
+        if var hasSocialSecurityNumber = entrantBeingCreated as? HasSocialSecurityNumber {
+            
+            guard let socialSecurityString = ssnField.text, socialSecurityString.count > 0, let socialSecurityNumber = Int(socialSecurityString) else {
+                throw FieldParsingError.invalidSSN
+            }
+            
+            hasSocialSecurityNumber.ssn = socialSecurityNumber
+        }
+        
+        // 3. Project Number
         
         if let contractor = entrantBeingCreated as? Contractor {
             
@@ -284,10 +345,9 @@ class PassGenerationViewController: UIViewController {
             } else {
                 throw FieldParsingError.invalidProject
             }
-            
         }
         
-        // 3. First & Last Names
+        // 4. First & Last Names
         if var entrantWithName = entrantBeingCreated as? Nameable {
             
             guard let firstName = firstNameField.text, firstName.count > 0 else {
@@ -302,10 +362,16 @@ class PassGenerationViewController: UIViewController {
             entrantWithName.lastName = lastName
         }
         
-        // 4. Company
-        // TODO: ADD THIS
+        // 5. Company
+        if let entrantFromCompany = entrantBeingCreated as? Vendor {
+            guard let company = companyField.text, company.count > 0 else {
+                throw FieldParsingError.invalidCompany
+            }
+            
+            entrantFromCompany.company = company
+        }
         
-        // 5. Address
+        // 6. Address
         if var entrantWithAddress = entrantBeingCreated as? Mailable {
             
             guard let address = Address(streetAddress: streetField.text, city: cityField.text, state: stateField.text, zipCode: zipCodeField.text) else {
@@ -325,40 +391,5 @@ class PassGenerationViewController: UIViewController {
         
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
-    }
-}
-
-extension Date {
-    static func create(from stringRepresentation: String) -> Date? {
-        let dateFormtatter = DateFormatter()
-        dateFormtatter.dateFormat = "dd - MM - yyyy"
-        return dateFormtatter.date(from: stringRepresentation)
-    }
-}
-
-enum FieldParsingError: Error {
-    case invalidDateOfBirth
-    case childOver5
-    case missingFirstName
-    case missingLastName
-    case invalidAddress
-    case invalidProject
-    
-    
-}
-extension FieldParsingError: LocalizedError {
-    var errorDescription: String? {
-        switch self {
-        case .invalidDateOfBirth:
-            return "An invalid date of birth was inserted for this guest. Please enter date of birth in the format day - month - year."
-        case .childOver5:
-            return "Child guests must be under 5 years of age to qualify for free entry."
-        case .missingFirstName, .missingLastName:
-            return "Please ensure that a first and last name is recorded for this guest."
-        case .invalidAddress:
-            return "Please ensure that street address, city, state and zip code are all entered for this guest."
-        case .invalidProject:
-            return "The project identifier entered for this contractor does not match the identifier of any recent projects undertaken at this park. Please contact a manager."
-        }
     }
 }

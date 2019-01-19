@@ -40,6 +40,10 @@ extension AgeIdentifiable {
     }
 }
 
+protocol HasSocialSecurityNumber {
+    var ssn: Int? { get set }
+}
+
 protocol Nameable {
     var firstName: String? { get set }
     var lastName: String? { get set }
@@ -80,18 +84,4 @@ protocol Mailable {
 protocol WorkTrackable {
     var dateOfVisit: Date { get set }
     var company: String { get set }
-}
-
-// MARK: - Errors describing missing information.
-enum InformationError: Error {
-    case missingFirstName
-    case missingLastName
-    
-    case missingStreetAddress
-    case missingCity
-    case missingState
-    case missingZipCode
-    
-    case missingBirthday
-    case ageRequirementNotMet
 }
