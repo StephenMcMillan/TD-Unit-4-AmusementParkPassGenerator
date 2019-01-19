@@ -16,12 +16,11 @@ class ReviewPassViewController: UIViewController {
     // Outlets
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var passDescriptionLabel: UILabel!
-    
-    
+
     @IBOutlet weak var birthdayLabel: UILabel!
+    @IBOutlet weak var unlimitedRidesLabel: UILabel!
     @IBOutlet weak var foodDiscountLabel: UILabel!
     @IBOutlet weak var merchDiscountLabel: UILabel!
-    
     
     // Button Outlets
     @IBOutlet weak var amusementTestButton: UIButton!
@@ -79,6 +78,8 @@ class ReviewPassViewController: UIViewController {
             }
         }
         
+        unlimitedRidesLabel.isHidden = entrant.pass.ridePermissions.contains(.all) ? false : true
+
         if let entrant = entrant as? AgeIdentifiable, entrant.isBirthday {
                 birthdayLabel.isHidden = false
         } else {
@@ -119,10 +120,10 @@ class ReviewPassViewController: UIViewController {
         }
         
         if let accessArea = accessAreaRequired {
-            let result = PassReader.swipe(entrant.pass, forAccessTo: accessArea)
+            let result = PassReader.swipe(entrant.pass, type: .secureArea(accessArea))
             triggerResultView(result: result)
         } else if let purchaseType = discountRequested {
-            let result = KioskCashRegister.swipe(entrant.pass, forPurchaseOf: purchaseType)
+            let result = KioskCashRegister.swipe(entrant.pass, type: .discount(purchaseType))
             triggerResultView(result: result)
         }
     }

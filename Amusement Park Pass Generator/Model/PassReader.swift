@@ -8,67 +8,60 @@
 
 import Foundation
 
-// How to stop a pass being swiped more than 2 times... hmmm
+protocol Swipeable {
+    static func swipe(_ pass: ParkPass, type: SwipeType) -> SwipeResult
+}
 
-/// Models a pass reader machine that could be located at any location around the park. Eg: At food area, ride queue etc..
-
-// TODO: Create a PassReader error type so that swipe(pass: ParkPass... etc) can throw a passTimedOut error instead of a print statement.
-class PassReader {
+extension Swipeable {
     
-    static func swipe(_ pass: ParkPass, forAccessTo secureArea: AccessArea) -> SwipeResult {
+    static func swipe(_ pass: ParkPass, type: SwipeType) -> SwipeResult {
+        
+        defer {
+            pass.lastSwipe = Date()
+        }
         
         guard passIsUsable(pass) else {
-            print("Please wait 5 seconds after swiping your pass before swiping again. Thank You.")
             return .timedOut
         }
         
-        alertIfBirthday(entrant: pass.holder)
-        
-        var accessStatus: Bool
-        
-        // Switch on the secure area that the pass wants access to.
-        switch secureArea {
+        switch type {
             
-        case .parkArea(let area):
-            accessStatus = pass.areaPermissions.contains(area)
-        case .ride(let rideAccess):
-            accessStatus = pass.ridePermissions.contains(rideAccess)
-        }
-        
-        print("Access \(accessStatus ? "Granted" : "Denied")")
-        
-        pass.lastSwipe = Date()
-        return accessStatus ? SwipeResult.accessGranted : SwipeResult.accessDenied
-        
-    }
-}
-
-class KioskCashRegister {
-    
-    // During checkout the entrant can swipe to get x amount of discount off their purchase.
-    static func swipe(_ pass: ParkPass, forPurchaseOf purchase: PurchaseType) -> SwipeResult {
-        
-        guard passIsUsable(pass) else {
-            return .timedOut // FIXME: Change this to a consisten swipe result that prints out an alert, nil could be anything.
-        }
-        
-        alertIfBirthday(entrant: pass.holder)
-        
-        for discount in pass.discountsAvailable {
-            if case discount.appliesTo = purchase {
+        case .secureArea(let accessArea):
             
-                print("Entrant is entitled to \(discount.amount)% off \(discount.appliesTo) purchases. :)")
-                return SwipeResult.discountAvailable(discount: discount)
+            switch accessArea {
+                
+            case .parkArea(let area):
+                return pass.areaPermissions.contains(area) ? .accessGranted : .accessDenied
+            case .ride(let rideAccess):
+                return pass.ridePermissions.contains(rideAccess) ? .accessGranted : .accessDenied
             }
+            
+        case .discount(let purchaseType):
+            
+            for discount in pass.discountsAvailable {
+                if case discount.appliesTo = purchaseType {
+                    return SwipeResult.discountAvailable(discount: discount)
+                }
+            }
+            
+            return .noDiscount
         }
-        
-        print("Entrant is not entitled to discounts of any kind. :(")
-        pass.lastSwipe = Date()
-        return SwipeResult.noDiscount
     }
 }
 
-// Swipe Results
+// This is an example of a physical object that may be at a ride entrance.
+class PassReader: Swipeable {}
+
+// This is an example of a physical cash register than may be a food or merch store in the park.
+class KioskCashRegister: Swipeable {}
+
+// Swipe Type
+enum SwipeType {
+    case secureArea(AccessArea)
+    case discount(PurchaseType)
+}
+
+// Swipe Result
 enum SwipeResult {
     case accessGranted
     case accessDenied
@@ -107,11 +100,12 @@ fileprivate func passIsUsable(_ pass: ParkPass?) -> Bool {
     return true
 }
 
-// Birthday Helper
-fileprivate func alertIfBirthday(entrant: Person?) {
-    if let entrantWithBirthday = entrant as? AgeIdentifiable {
-        if entrantWithBirthday.isBirthday {
-            print("Happy Birthday from all of us here at the Park!")
-        }
-    }
-}
+// ** NOT NEEDED **
+//// Birthday Helper
+//fileprivate func alertIfBirthday(entrant: Person?) {
+//    if let entrantWithBirthday = entrant as? AgeIdentifiable {
+//        if entrantWithBirthday.isBirthday {
+//            print("Happy Birthday from all of us here at the Park!")
+//        }
+//    }
+//}

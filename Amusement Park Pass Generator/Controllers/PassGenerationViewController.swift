@@ -374,7 +374,7 @@ class PassGenerationViewController: UIViewController {
         // 6. Address
         if var entrantWithAddress = entrantBeingCreated as? Mailable {
             
-            guard let address = Address(streetAddress: streetField.text, city: cityField.text, state: stateField.text, zipCode: zipCodeField.text) else {
+            guard let address = Address(streetAddress: streetField.text, city: cityField.text, state: stateField.text, zipCodeString: zipCodeField.text) else {
                 throw FieldParsingError.invalidAddress
             }
             

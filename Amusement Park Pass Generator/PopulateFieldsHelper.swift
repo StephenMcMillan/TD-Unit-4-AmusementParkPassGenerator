@@ -45,7 +45,7 @@ extension PassGenerationViewController {
             streetField.text = randomStreetAddress.randomElement()
             stateField.text = randomStates.randomElement()
             cityField.text = randomCities.randomElement()
-            zipCodeField.text = "\(Int.random(in: 1000...9999))"
+            zipCodeField.text = "\(Int.random(in: 00501...99950))"
         }
     }
 }

@@ -54,14 +54,19 @@ struct Address {
     var streetAddress: String
     var city: String
     var state: String
-    var zipCode: String
+    var zipCode: Int
     
     // Trys to create an Address or returns nil if fields are invalid.
-    init?(streetAddress: String?, city: String?, state: String?, zipCode: String?) {
+    init?(streetAddress: String?, city: String?, state: String?, zipCodeString: String?) {
 
-        if let street = streetAddress, let city = city, let state = state, let zipCode = zipCode {
+        if let street = streetAddress, let city = city, let state = state, let zipCodeString = zipCodeString {
 
-            guard street.count > 0 && city.count > 0 && state.count > 0 && zipCode.count > 0 else {
+            guard street.count > 0 && city.count > 0 && state.count > 0 else {
+                return nil
+            }
+            
+            // Checks the zipcode is an int and in the US zip code range
+            guard let zipCode = Int(zipCodeString), 00501...99950 ~= zipCode  else {
                 return nil
             }
 
